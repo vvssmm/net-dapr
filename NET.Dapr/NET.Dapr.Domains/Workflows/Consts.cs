@@ -9,12 +9,20 @@
             APPROVED,
             REJECTED
         }
-
         internal enum TASK_STATUS
         {
             NEW,
             COMPLETED,
             TERMINATED
+        }
+
+        internal static class WfConfig
+        {
+            internal const string WorkflowCode = "LeaveRequestWf";
+            internal static class WfSteps
+            {
+                internal const string WaitingForApproval = "WaitingForApproval";
+            }
         }
     }
 }

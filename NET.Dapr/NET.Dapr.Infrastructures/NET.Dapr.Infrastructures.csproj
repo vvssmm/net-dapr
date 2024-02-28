@@ -10,4 +10,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NET.Dapr.Domains\NET.Dapr.Domains.csproj" />
+  </ItemGroup>
+
 </Project>
