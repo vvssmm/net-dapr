@@ -11,4 +11,11 @@
     <PackageReference Include="Dapr.Workflow" Version="1.12.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Actors\" />
+    <Folder Include="SeedData\" />
+    <Folder Include="Services\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
 </Project>

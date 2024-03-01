@@ -1,19 +1,19 @@
 ﻿using Dapr.Workflow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
 {
-    internal record LRSendEmailNotifyRequest(string EmailCode,object Data);
-    internal record LRSendEmailNotifyResponse(bool IsSuccess,string Message);
-    internal class LRSendEmailNotifyActivity : WorkflowActivity<GetApprovalRequest, GetApprovalResponse>
+    public record LRSendEmailNotifyRequest(string EmailCode, object Data);
+    public record LRSendEmailNotifyResponse(bool IsSuccess, List<string> Messages);
+    public class LRSendEmailNotifyActivity(ILoggerFactory loggerFactory) : WorkflowActivity<LRSendEmailNotifyRequest, LRSendEmailNotifyResponse>
     {
-        public override Task<GetApprovalResponse> RunAsync(WorkflowActivityContext context, GetApprovalRequest input)
+        readonly ILogger _logger = loggerFactory.CreateLogger<LRSendEmailNotifyActivity>();
+        public override Task<LRSendEmailNotifyResponse> RunAsync(WorkflowActivityContext context, LRSendEmailNotifyRequest input)
         {
-            throw new NotImplementedException();
+            _logger.LogDebug("Access to LRSendEmailNotifyActivity");
+            _logger.LogInformation($"Workflow instance {context.InstanceId} send email code {input.EmailCode} {JsonSerializer.Serialize(input.Data)}");
+            return Task.FromResult(new LRSendEmailNotifyResponse(true, ["Send Email Success"]));
         }
     }
 }

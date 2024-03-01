@@ -2,20 +2,26 @@
 {
     internal static class Consts
     {
-        internal enum WORKFLOW_STATUS
+        internal enum WorkflowStatus
         {
-            SUBMITTED,
-            WAITING_FOR_APPROVAL,
-            APPROVED,
-            REJECTED
+            GetApprover,
+            WaitingForApproval,
+            Approved,
+            Rejected,
+            Timeout
         }
-        internal enum TASK_STATUS
+        internal enum TaskStatus
         {
-            NEW,
-            COMPLETED,
-            TERMINATED
+            New,
+            Completed,
+            Terminated
         }
-
+        internal enum EmailHistoryCode
+        {
+            ReviewAndApprovalNotification,
+            ApprovalReminderNotification,
+            ApprovalResultNotification,
+        }
         internal static class WfConfig
         {
             internal const string WorkflowCode = "LeaveRequestWf";

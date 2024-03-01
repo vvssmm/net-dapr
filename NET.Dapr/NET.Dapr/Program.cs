@@ -1,3 +1,7 @@
+using Dapr.Workflow;
+using NET.Dapr.Domains.Workflows.LeaveRequest;
+using NET.Dapr.Domains.Workflows.LeaveRequest.Activities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,7 +10,19 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddLogging(builder => builder.AddConsole());
+builder.Services.AddDaprWorkflow(options =>
+{
+    // Note that it's also possible to register a lambda function as the workflow
+    // or activity implementation instead of a class.
+    options.RegisterWorkflow<LeaveRequestWorkflow>();
 
+    // These are the activities that get invoked by the workflow(s).
+    options.RegisterActivity<LRGetApproverActivity>();
+    options.RegisterActivity<LRProcessApproveTransactionActivity>();
+    options.RegisterActivity<LRProcessTimeoutTransactionActivity>();
+    options.RegisterActivity<LRSendEmailNotifyActivity>();
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
