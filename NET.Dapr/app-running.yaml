@@ -1,0 +1,13 @@
+version: 1
+apps:
+  - appID: wfactor
+    appDirPath: ./NET.Dapr.Actors
+    daprHTTPPort: 3000
+    command: ["dotnet", "run"]
+  - appID: wfapp
+    appDirPath: ./NET.Dapr
+    daprHTTPPort: 3001
+    daprGRPCPort: 4001
+    env:
+      DAPR_HOST_ADD: localhost
+    command: ["dotnet", "run"]

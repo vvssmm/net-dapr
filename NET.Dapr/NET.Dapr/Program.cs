@@ -1,4 +1,6 @@
 using Dapr.Workflow;
+using NET.Dapr;
+using NET.Dapr.Domains.Actors;
 using NET.Dapr.Domains.Workflows.LeaveRequest;
 using NET.Dapr.Domains.Workflows.LeaveRequest.Activities;
 
@@ -11,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging(builder => builder.AddConsole());
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddDaprWorkflow(options =>
 {
     // Note that it's also possible to register a lambda function as the workflow
@@ -23,6 +26,11 @@ builder.Services.AddDaprWorkflow(options =>
     options.RegisterActivity<LRProcessTimeoutTransactionActivity>();
     options.RegisterActivity<LRSendEmailNotifyActivity>();
 });
+builder.Services.AddActors(options =>
+{
+    options.Actors.RegisterActor<LRReminderApprovalTaskActor>();
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,10 +39,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseHsts();
+}
+
+app.UseExceptionHandler(opt => { });
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
+
+app.UseEndpoints(endpoints => endpoints.MapActorsHandlers());
 
 app.MapControllers();
 

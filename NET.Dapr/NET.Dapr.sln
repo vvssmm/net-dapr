@@ -5,9 +5,11 @@ VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr", "NET.Dapr\NET.Dapr.csproj", "{77CF8B6C-5BF0-4590-8C94-490402A3542D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.Dapr.Domains", "NET.Dapr.Domains\NET.Dapr.Domains.csproj", "{4E941E65-7AFF-4F03-884C-C18774C58F22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Domains", "NET.Dapr.Domains\NET.Dapr.Domains.csproj", "{4E941E65-7AFF-4F03-884C-C18774C58F22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.Dapr.Infrastructures", "NET.Dapr.Infrastructures\NET.Dapr.Infrastructures.csproj", "{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Infrastructures", "NET.Dapr.Infrastructures\NET.Dapr.Infrastructures.csproj", "{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.Dapr.Actors", "NET.Dapr.Actors\NET.Dapr.Actors.csproj", "{320575E9-62F8-466F-B7F2-DEB7049C2A80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

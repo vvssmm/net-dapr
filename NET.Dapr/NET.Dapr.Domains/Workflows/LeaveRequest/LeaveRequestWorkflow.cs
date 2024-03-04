@@ -5,20 +5,17 @@ using static NET.Dapr.Domains.Workflows.Consts;
 
 namespace NET.Dapr.Domains.Workflows.LeaveRequest
 {
-    public class LeaveRequestWorkflow : Workflow<LRSubmitPayload, LRSubmitResult>
+    public class LeaveRequestWorkflow : Workflow<LRStartWorkflowPayload, LRStartWorkflowResult>
     {
-        public override async Task<LRSubmitResult> RunAsync(WorkflowContext context, LRSubmitPayload input)
+        public override async Task<LRStartWorkflowResult> RunAsync(WorkflowContext context, LRStartWorkflowPayload input)
         {
             bool isSuccess = false;
             List<string> messages = [];
-
             if (string.IsNullOrEmpty(input.DivisionCode))
             {
                 messages.Add("DivisionCode is required");
-                return new LRSubmitResult(context.InstanceId, isSuccess, messages);
+                return new LRStartWorkflowResult(context.InstanceId, isSuccess, messages);
             }
-            context.SetCustomStatus(WorkflowStatus.GetApprover.ToString());
-
             var getApproverResponse =  await context.CallActivityAsync<GetApproverResponse>(
                  nameof(LRGetApproverActivity),
                  new GetApproverRequest(input.DivisionCode)
@@ -36,12 +33,12 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                          getApproverResponse.Email,
                          getApproverResponse.Code
                      }));
+
                 ManagerApprovalResult managerApprovalResultResp = default;
+                context.SetCustomStatus(WorkflowStatus.WaitingForApproval.ToString());
 
                 try
                 {
-
-                    context.SetCustomStatus(WorkflowStatus.WaitingForApproval.ToString());
                     managerApprovalResultResp = await context.WaitForExternalEventAsync<ManagerApprovalResult>(
                         eventName: "ManagerApproval",
                         timeout: TimeSpan.FromMinutes(10));
@@ -63,9 +60,9 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                                 getApproverResponse.Email,
                                 getApproverResponse.Code
                             }));
-                    context.SetCustomStatus(WorkflowStatus.Timeout.ToString());
 
-                    return new LRSubmitResult(context.InstanceId, isSuccess, messages);
+                    context.SetCustomStatus(WorkflowStatus.Timeout.ToString());
+                    return new LRStartWorkflowResult(context.InstanceId, isSuccess, messages);
                 }
 
                 var approvalProcessResult = await context.CallActivityAsync<LRProcessApproveTransactionResponse>(
@@ -73,7 +70,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                         new LRProcessApproveTransactionRequest(
                             DateTime.Now,
                             managerApprovalResultResp.IsApproved
-                            ,managerApprovalResultResp.Messages));
+                            ,managerApprovalResultResp.Comment));
 
                 await context.CallActivityAsync(
                         nameof(LRSendEmailNotifyActivity),
@@ -98,11 +95,11 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                 messages.Add($"Get Approver Error. Not found approver with division code {input.DivisionCode}");
             }
 
-            return new LRSubmitResult(context.InstanceId, isSuccess, messages);
+            return new LRStartWorkflowResult(context.InstanceId, isSuccess, messages);
         }
     }
-    public record LRSubmitPayload(
+    public record LRStartWorkflowPayload(
     string EmployeeCode, string EmployeeName, string DivisionCode, DateTime? DateOffFrom,
     DateTime? DateOffTo, string LeaveRequestType, string Reason);
-    public record LRSubmitResult(string WorkflowInstaceId, bool IsSuccess, List<string> Messages);
+    public record LRStartWorkflowResult(string WorkflowInstaceId, bool IsSuccess, List<string> Messages);
 }
