@@ -20,5 +20,24 @@ namespace NET.Dapr.Controllers
             apiModel.Success = true;
             return Ok(apiModel);
         }
+        [HttpGet]
+        public async Task<IActionResult> Search([FromQuery] LRSearchModel payloadSubmit)
+        {
+            var apiModel = new ApiSearchResultModel<List<LRDataModel>>();
+            var response = await _leaveRequestService.Search(payloadSubmit);
+            apiModel.Data = response.Item1;
+            apiModel.TotalCount = response.Item2;
+            apiModel.Success = true;
+            return Ok(apiModel);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            var apiModel = new ApiResultModel<LRDataModel>();
+            var response = await _leaveRequestService.GetById(id);
+            apiModel.Data = response;
+            apiModel.Success = true;
+            return Ok(apiModel);
+        }
     }
 }

@@ -14,8 +14,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
         readonly IUnitOfWork _unitOfWork = unitOfWork;
         public override async Task<GetApproverAndCreateTaskResponse> RunAsync(WorkflowActivityContext context, GetApproverAndCreateTaskRequest input)
         {
-            _logger.LogInformation($"WF {context.InstanceId} Access to Get Approver Activity");
-            _logger.LogInformation($"WF {context.InstanceId} is getting approver");
+            _logger.LogInformation($"WF {context.InstanceId} is getting approver for leave request {input.TransactionId}");
             var approvalConfigDbSet = _unitOfWork.GetDbSet<ApproverConfig>();
             var approverConfig = await approvalConfigDbSet.FirstOrDefaultAsync(x => x.DivisionCode == input.DivisionCode);
             GetApproverAndCreateTaskResponse getApproverResult = default;
@@ -29,7 +28,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
                 var taskDbSet = _unitOfWork.GetDbSet<LRTasks>();
                 var task = new LRTasks()
                 {
-                    TaskName = $"[{context.InstanceId}] Review and Aprroval for Leave Request ID {input.TransactionId} {input.EmployeeCode} - {input.EmployeeName}",
+                    TaskName = $"[{input.TransactionId}] Review and Aprroval for Leave Request {input.EmployeeCode} - {input.EmployeeName}",
                     Status = LRTaskStatus.New.ToString(),
                     Assignee = approverConfig.Code,
                     AssigneeEmail = approverConfig.Email,

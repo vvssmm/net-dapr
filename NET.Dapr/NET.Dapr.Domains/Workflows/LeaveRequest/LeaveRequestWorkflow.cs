@@ -30,7 +30,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                  nameof(LR_SendEmailNotifyActivity),
                  new LRSendEmailNotifyRequest(
                      TransactionId:input.TransactionId,
-                     Subject:$"[{context.InstanceId}][Review approval request] Leave Request {input.TransactionId} - {input.EmployeeCode} - {input.EmployeeName}",
+                     Subject:$"[{input.TransactionId}][Review approval request] Leave Request {input.EmployeeCode} - {input.EmployeeName}",
                      Body:$"Dear {getApproverResponse.Name} <br/>" +
                         $"Please review and approve for leave request of {input.EmployeeName}. <br/>" +
                         $"Leave from {input.DateOffFrom:dd/MM/yyyy} to {input.DateOffTo:dd/MM/yyyy}. <br/><br/>" +
@@ -58,7 +58,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                         nameof(LR_SendEmailNotifyActivity),
                        new LRSendEmailNotifyRequest(
                               TransactionId: input.TransactionId,
-                               Subject: $"[{context.InstanceId}][Review approval result] Leave request {input.TransactionId} - {input.EmployeeCode} - {input.EmployeeName}",
+                               Subject: $"[{input.TransactionId}][Review approval result] Leave request - {input.EmployeeCode} - {input.EmployeeName}",
                                Body: $"Dear {getApproverResponse.Name} <br/>" +
                                   $"Leave request has been timeout. Processing automatically cancelled. <br/>" +
                                   $"Thanks and best regards.",
