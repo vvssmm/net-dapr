@@ -1,8 +1,9 @@
 ﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
+using NET.Dapr.Domains.Models.ApiModels;
+using NET.Dapr.Domains.Services;
 using NET.Dapr.Domains.Workflows.LeaveRequest;
 using NET.Dapr.Domains.Workflows.LeaveRequest.Models;
-using NET.Dapr.Domains.Workflows.LeaveRequest.Models.ApiModels;
 using System.Text.Json;
 
 namespace NET.Dapr.Controllers
@@ -21,33 +22,33 @@ namespace NET.Dapr.Controllers
         readonly ILogger logger = loggerFactory.CreateLogger<WorkflowController>();
 
         [HttpPost("start")]
-        public async Task<IActionResult> Start([FromBody] LRSubmitPayload payloadSubmit)
+        public async Task<IActionResult> Start([FromBody] LRStartWorkflowPayload payloadSubmit)
         {
-            var returnResult = new ApiResultModel<StartWorkflowResponseApiModel>();
+            var returnResult = new ApiResultModel<LRDataModel>();
             logger.LogDebug($"Receive body {JsonSerializer.Serialize(payloadSubmit)}");
-            string newInstanceId = Guid.NewGuid().ToString();
+            string newInstanceId = DateTime.Now.ToString("yyyyMMddHHmmss");
             logger.LogDebug($"InstanceId: {newInstanceId}");
 
             var requestStartWorlflow = await daprClient.StartWorkflowAsync(
                 workflowComponent,
                 workflowName,
-                instanceId:newInstanceId, 
+                instanceId:newInstanceId,
                 workflowOptions:workflowOptionDics,
                 input:payloadSubmit);
 
             returnResult.Success = true;
-            returnResult.Data = new StartWorkflowResponseApiModel()
+            returnResult.Data = new LRDataModel()
             {
                 WorkflowInstanceId = requestStartWorlflow.InstanceId,
-                Messages = ["Start workflow success"]
             };
+            returnResult.Messages = ["start workflow successfully"];
             return Ok(returnResult);
         }
-        [HttpPost("approve")]
-        public async Task<IActionResult> Approve([FromBody] WorkflowApprovalApiModel payloadApprove)
-        {
-             await daprClient.RaiseWorkflowEventAsync(payloadApprove.WfInstanceId, workflowComponent, workflowApproveEventName, payloadApprove.ApprovalResult);
-            return Ok(new ApiResultModel<string>() { Success = true });
-        }
+        //[HttpPost("approve")]
+        //public async Task<IActionResult> Approve([FromBody] WorkflowApprovalApiModel payloadApprove)
+        //{
+        //    await daprClient.RaiseWorkflowEventAsync(payloadApprove.WfInstanceId, workflowComponent, workflowApproveEventName, payloadApprove.ApprovalResult);
+        //    return Ok(new ApiResultModel<string>() { Success = true });
+        //}
     }
 }

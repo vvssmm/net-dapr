@@ -19,15 +19,36 @@ namespace NET.Dapr.Domains.Entities
         [MaxLength(255)]
         public string DivisionCode { get; set; }
         [Column("STATUS")]
-        public int Status { get; set; }
+        public string Status { get; set; }
         [Column("REASON")]
         [MaxLength(1000)]
         public string Reason { get; set; }
-        [Column("DATE_OFF_FORM")]
-        public DateTime? DateOffForm { get; set; }
+        [Column("DATE_OFF_FROM")]
+        public DateTime? DateOffFrom { get; set; }
         [Column("DATE_OFF_TO")]
         public DateTime? DateOffTo { get; set; }
         [Column("APPROVER")]
         public string Approver { get; set; }
+        [Column("CC")]
+        [MaxLength(255)]
+        public string Cc { get; set; }
+        [Column("BCC")]
+        [MaxLength(255)]
+        public string Bcc { get; set; }
+        [Column("LEAVE_REQUEST_TYPE")]
+        [MaxLength(100)]
+        public string LeaveRequestType { get; set; }
+        [Column("PERIOD_DATE_OFF_FROM")]
+        [MaxLength(255)]
+        public string PeriodDateOffFrom { get; set; }
+        [Column("PERIOD_DATE_OFF_TO")]
+        [MaxLength(255)]
+        public string PeriodDateOffTo { get; set; }
+        [Column("LEAVE_REQUEST_DATE_TYPE")]
+        [MaxLength(255)]
+        public string LeaveRequestDateType { get; set; }
+        [Column("COMMENT")]
+        [MaxLength(500)]
+        public string Comment { get; set; }
     }
 }

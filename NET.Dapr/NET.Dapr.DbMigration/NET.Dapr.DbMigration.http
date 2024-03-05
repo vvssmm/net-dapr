@@ -1,0 +1,6 @@
+@NET.Dapr.DbMigration_HostAddress = http://localhost:5224
+
+GET {{NET.Dapr.DbMigration_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

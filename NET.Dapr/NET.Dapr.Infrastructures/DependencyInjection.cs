@@ -5,10 +5,11 @@ namespace NET.Dapr.Infrastructures
 {
     public static class DependencyInjection
     {
-        public static void AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddDbContext<PgDbContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            return services;
         }
     }
 }

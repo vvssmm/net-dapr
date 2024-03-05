@@ -1,8 +1,8 @@
-﻿using Dapr.Actors.Client;
-using Dapr.Actors;
+﻿using Dapr.Actors;
+using Dapr.Actors.Client;
 using Microsoft.AspNetCore.Mvc;
 using NET.Dapr.Domains.Actors;
-using NET.Dapr.Domains.Workflows.LeaveRequest.Models.ApiModels;
+using NET.Dapr.Domains.Models.ApiModels;
 
 namespace NET.Dapr.Actors.Controllers
 {

@@ -1,4 +1,4 @@
-namespace NET.Dapr
+namespace NET.Dapr.DbMigration
 {
     public class WeatherForecast
     {

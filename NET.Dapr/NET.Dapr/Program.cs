@@ -1,8 +1,10 @@
 using Dapr.Workflow;
 using NET.Dapr;
+using NET.Dapr.Domains;
 using NET.Dapr.Domains.Actors;
 using NET.Dapr.Domains.Workflows.LeaveRequest;
 using NET.Dapr.Domains.Workflows.LeaveRequest.Activities;
+using NET.Dapr.Infrastructures;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging(builder => builder.AddConsole());
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddInfrastructure();
+builder.Services.InjectService();
 builder.Services.AddDaprWorkflow(options =>
 {
     // Note that it's also possible to register a lambda function as the workflow
@@ -21,10 +25,11 @@ builder.Services.AddDaprWorkflow(options =>
     options.RegisterWorkflow<LeaveRequestWorkflow>();
 
     // These are the activities that get invoked by the workflow(s).
-    options.RegisterActivity<LRGetApproverActivity>();
-    options.RegisterActivity<LRProcessApproveTransactionActivity>();
-    options.RegisterActivity<LRProcessTimeoutTransactionActivity>();
-    options.RegisterActivity<LRSendEmailNotifyActivity>();
+    options.RegisterActivity<LR_GetApproverAndCreateTaskActivity>();
+    options.RegisterActivity<LR_AfterManagerApprovalActivity>();
+    options.RegisterActivity<LR_ApprovalTimeoutActivity>();
+    options.RegisterActivity<LR_SendEmailNotifyActivity>();
+    options.RegisterActivity<LR_ReminderApprovalTaskActivity>();
 });
 builder.Services.AddActors(options =>
 {

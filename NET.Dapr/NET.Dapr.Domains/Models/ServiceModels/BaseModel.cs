@@ -1,4 +1,4 @@
-﻿namespace NET.Dapr.Domains.Services.Models
+﻿namespace NET.Dapr.Domains.Models.ServiceModels
 {
     public class BaseModel
     {

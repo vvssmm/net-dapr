@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NET.Dapr.Domains.Services;
 
 namespace NET.Dapr.Domains
 {
@@ -6,7 +7,8 @@ namespace NET.Dapr.Domains
     {
         public static void InjectService(this IServiceCollection services)
         {
-            //services.AddDbCon
+            services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+            services.AddScoped<ITaskService, TasksService>();
         }
     }
 }

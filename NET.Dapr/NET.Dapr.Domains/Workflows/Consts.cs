@@ -2,7 +2,7 @@
 {
     internal static class Consts
     {
-        internal enum WorkflowStatus
+        internal enum LRWorkflowStatus
         {
             GetApprover,
             WaitingForApproval,
@@ -10,13 +10,19 @@
             Rejected,
             Timeout
         }
-        internal enum TaskStatus
+        internal enum LRTaskStatus
         {
             New,
             Completed,
             Terminated
         }
-        internal enum EmailHistoryCode
+        internal enum LREmailStatus
+        {
+            New,
+            Sent,
+            Error
+        }
+        internal enum LREmailHistoryCode
         {
             ReviewAndApprovalNotification,
             ApprovalReminderNotification,
@@ -30,5 +36,6 @@
                 internal const string WaitingForApproval = "WaitingForApproval";
             }
         }
+        internal const string DefaultSchema="DAPR";
     }
 }

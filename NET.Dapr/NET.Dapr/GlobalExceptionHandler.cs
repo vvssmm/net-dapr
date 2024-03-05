@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using NET.Dapr.Domains.Workflows.LeaveRequest.Models.ApiModels;
+using NET.Dapr.Domains.Models.ApiModels;
 
 namespace NET.Dapr
 {

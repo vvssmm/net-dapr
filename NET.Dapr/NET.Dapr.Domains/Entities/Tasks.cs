@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace NET.Dapr.Domains.Entities
 {
     [Table("TASKS")]
-    public class Tasks:BaseEntity
+    public class LRTasks:BaseEntity
     {
         [Column("TASK_NAME")]
         [MaxLength(500)]
@@ -20,7 +20,5 @@ namespace NET.Dapr.Domains.Entities
         public string Status { get; set; }
         [Column("TRANSACTION_ID")]
         public long? TransactionId { get; set; }
-        [Column("FORM_ID")]
-        public long? FormId { get; set; }
     }
 }

@@ -2,11 +2,13 @@
 {
     public class WorkflowApprovalApiModel
     {
-        public string WfInstanceId { get; set; }
-        public ManagerApprovalResult ApprovalResult { get; set; }
+        public long TransactionId { get; set; }
+        public bool IsApproved { get; set; }
+        public string Comment { get; set; }
     }
     public class ManagerApprovalResult
     {
+        public long TaskId { get; set; }
         public bool IsApproved { get; set; }
         public string Comment { get; set; }
     }

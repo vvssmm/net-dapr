@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Domains", "NET.Dap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Infrastructures", "NET.Dapr.Infrastructures\NET.Dapr.Infrastructures.csproj", "{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.Dapr.Actors", "NET.Dapr.Actors\NET.Dapr.Actors.csproj", "{320575E9-62F8-466F-B7F2-DEB7049C2A80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Actors", "NET.Dapr.Actors\NET.Dapr.Actors.csproj", "{320575E9-62F8-466F-B7F2-DEB7049C2A80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.Dapr.DbMigration", "NET.Dapr.DbMigration\NET.Dapr.DbMigration.csproj", "{6FDC359F-1963-4F4E-B042-98C067A01657}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FDC359F-1963-4F4E-B042-98C067A01657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FDC359F-1963-4F4E-B042-98C067A01657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FDC359F-1963-4F4E-B042-98C067A01657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FDC359F-1963-4F4E-B042-98C067A01657}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
