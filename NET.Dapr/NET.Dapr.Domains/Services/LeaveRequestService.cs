@@ -21,7 +21,10 @@ namespace NET.Dapr.Domains.Services
 
         Dictionary<string, string> workflowOptionDics = new();
 
-        readonly DaprClient daprClient = new DaprClientBuilder().Build();
+        readonly DaprClient daprClient = new DaprClientBuilder()
+        {
+            grpcPort = 50001
+        }.Build();
 
         public async Task<StartWorkflowResponse> LRSubmit(LRBaseModel postModel)
         {

@@ -23,4 +23,8 @@
     <ProjectReference Include="..\NET.Dapr.Infrastructures\NET.Dapr.Infrastructures.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 </Project>

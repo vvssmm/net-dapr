@@ -1,4 +1,6 @@
+using Dapr.Client;
 using Dapr.Workflow;
+using Google.Api;
 using NET.Dapr;
 using NET.Dapr.Domains;
 using NET.Dapr.Domains.Actors;
@@ -18,6 +20,12 @@ builder.Services.AddLogging(builder => builder.AddConsole());
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddInfrastructure();
 builder.Services.InjectService();
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 builder.Services.AddDaprWorkflow(options =>
 {
     // Note that it's also possible to register a lambda function as the workflow
@@ -39,24 +47,13 @@ builder.Services.AddActors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else
-{
-    app.UseHsts();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseExceptionHandler(opt => { });
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
-
-app.UseEndpoints(endpoints => endpoints.MapActorsHandlers());
-
 app.MapControllers();
-
+app.UseCors("MyPolicy");
 app.Run();

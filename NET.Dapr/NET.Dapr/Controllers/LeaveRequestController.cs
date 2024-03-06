@@ -11,7 +11,11 @@ namespace NET.Dapr.Controllers
     public class LeaveRequestController(ILeaveRequestService leaveRequestService) : ControllerBase
     {
         readonly ILeaveRequestService _leaveRequestService = leaveRequestService;
+
         [HttpPost("Submit")]
+        [ProducesResponseType(typeof(ApiResultModel<StartWorkflowResponse>), 200)]
+        [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
+
         public async Task<IActionResult> SubmitForm([FromBody] LRBaseModel payloadSubmit)
         {
             var apiModel = new ApiResultModel<StartWorkflowResponse>();
@@ -21,6 +25,8 @@ namespace NET.Dapr.Controllers
             return Ok(apiModel);
         }
         [HttpGet]
+        [ProducesResponseType(typeof(ApiSearchResultModel<List<LRDataModel>>), 200)]
+        [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
         public async Task<IActionResult> Search([FromQuery] LRSearchModel payloadSubmit)
         {
             var apiModel = new ApiSearchResultModel<List<LRDataModel>>();
@@ -31,6 +37,9 @@ namespace NET.Dapr.Controllers
             return Ok(apiModel);
         }
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResultModel<LRDataModel>), 200)]
+        [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
+
         public async Task<IActionResult> GetById(long id)
         {
             var apiModel = new ApiResultModel<LRDataModel>();

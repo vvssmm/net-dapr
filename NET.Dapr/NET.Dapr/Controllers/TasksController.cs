@@ -11,6 +11,8 @@ namespace NET.Dapr.Controllers
     {
         readonly ITaskService _taskService = taskService;
         [HttpPost("approval")]
+        [ProducesResponseType(typeof(ApiResultModel<string>), 200)]
+        [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
         public async Task<IActionResult> Approve([FromBody] WorkflowApprovalApiModel payloadSubmit)
         {
             var apiModel = new ApiResultModel<string>();
@@ -18,6 +20,8 @@ namespace NET.Dapr.Controllers
             apiModel.Success = true;
             return Ok(apiModel);
         }
+        [ProducesResponseType(typeof(ApiSearchResultModel<List<LRTaskDataModel>>), 200)]
+        [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] LRTaskSearchModel payloadSubmit)
         {
@@ -29,6 +33,8 @@ namespace NET.Dapr.Controllers
             return Ok(apiModel);
         }
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResultModel<LRTaskDataModel>), 200)]
+        [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
         public async Task<IActionResult> GetById(long id)
         {
             var apiModel = new ApiResultModel<LRTaskDataModel>();
