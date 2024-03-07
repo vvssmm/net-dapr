@@ -1,9 +1,13 @@
-﻿using Dapr.Client;
+﻿using AutoMapper;
+using Dapr.Client;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using NET.Dapr.Domains.Entities;
 using NET.Dapr.Domains.Infra;
 using NET.Dapr.Domains.Models.ServiceModels;
 using NET.Dapr.Domains.Workflows.LeaveRequest;
+using System.Linq.Expressions;
+using static NET.Dapr.Domains.Consts;
 
 namespace NET.Dapr.Domains.Services
 {
@@ -13,54 +17,28 @@ namespace NET.Dapr.Domains.Services
         Task<(List<LRDataModel>, int)> Search(LRSearchModel searchModel);
         Task<LRDataModel> GetById(long id);
     }
-    public class LeaveRequestService(IUnitOfWork unitOfWork) : ILeaveRequestService
+    public class LeaveRequestService(IUnitOfWork unitOfWork,IMapper mapper) : ILeaveRequestService
     {
+        Dictionary<string, string> workflowOptionDics = [];
+
+        readonly DaprClient daprClient = new DaprClientBuilder(){}.Build();
         readonly IUnitOfWork _unitOfWork = unitOfWork;
-        const string workflowComponent = "dapr";
-        const string workflowName = "LeaveRequestWorkflow";
-
-        Dictionary<string, string> workflowOptionDics = new();
-
-        readonly DaprClient daprClient = new DaprClientBuilder()
-        {
-            grpcPort = 50001
-        }.Build();
-
+        readonly IMapper _mapper = mapper;
         public async Task<StartWorkflowResponse> LRSubmit(LRBaseModel postModel)
         {
-            var lrEntity = new LRTransaction();
+            var lrEntity = _mapper.Map<LRTransaction>(postModel);
             string workflowInstaceId = $"{postModel.EmployeeCode}-{DateTime.UtcNow:yyyyMMddHHmmssfff}";
             lrEntity.WfInstanceId = workflowInstaceId;
-            lrEntity.EmployeeCode = postModel.EmployeeCode;
-            lrEntity.EmployeeName = postModel.EmployeeName;
-            lrEntity.DivisionCode = postModel.DivisionCode;
-            lrEntity.DateOffFrom = postModel.DateOffFrom;
-            lrEntity.DateOffTo = postModel.DateOffTo;
-            lrEntity.Reason = postModel.Reason;
-            lrEntity.Cc = postModel.Cc;
-            lrEntity.Bcc = postModel.Bcc;
-            lrEntity.LeaveRequestType = postModel.LeaveRequestType;
-            lrEntity.LeaveRequestDateType = postModel.LeaveRequestDateType;
-            lrEntity.PeriodDateOffFrom = postModel.PeriodDateOffFrom;
-            lrEntity.PeriodDateOffTo = postModel.PeriodDateOffTo;
+           
             var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTransaction>();
             var responseEntity = await leaveRequestDbSet.AddAsync(lrEntity);
             int impactRows = await _unitOfWork.SaveChangesAsync();
             if (impactRows > 0)
             {
-                var workflowStartModel = new LRStartWorkflowPayload(
-                    responseEntity.Entity.Id,
-                    postModel.EmployeeCode,
-                    postModel.EmployeeName,
-                    postModel.DivisionCode,
-                    postModel.DateOffFrom,
-                    postModel.DateOffTo,
-                    postModel.Reason,
-                    postModel.Cc,
-                    postModel.Bcc);
+                var workflowStartModel = _mapper.Map<LRStartWorkflowPayload>(responseEntity);
 
                 var res = await daprClient.StartWorkflowAsync(
-                                workflowComponent, workflowName,
+                                WfConfig.WorkflowComponet, WfConfig.LeaveRequest.WorkflowName,
                                 instanceId: workflowInstaceId,
                                 workflowOptions: workflowOptionDics,
                                 input: workflowStartModel);
@@ -75,78 +53,36 @@ namespace NET.Dapr.Domains.Services
             List<LRDataModel> result = [];
 
             var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTransaction>();
-            var query = leaveRequestDbSet.AsQueryable();
+            Expression<Func<LRTransaction, bool>> whereExpression = t => true;
             if (!string.IsNullOrEmpty(searchModel.WfInstanceId))
             {
-                query = query.Where(t => t.WfInstanceId == searchModel.WfInstanceId);
+                whereExpression = whereExpression.And(l=>l.WfInstanceId == searchModel.WfInstanceId);
             }
             if (!string.IsNullOrEmpty(searchModel.EmployeeCode))
             {
-                query = query.Where(t => t.EmployeeCode == searchModel.EmployeeCode);
+                whereExpression = whereExpression.And(l => l.EmployeeCode == searchModel.EmployeeCode);
             }
             if (!string.IsNullOrEmpty(searchModel.DivisionCode))
             {
-                query = query.Where(t => t.DivisionCode == searchModel.DivisionCode);
+                whereExpression = whereExpression.And(l => l.DivisionCode == searchModel.DivisionCode);
             }
-            int totalCount = await query.CountAsync();
-            var returnEntityLs = await query.OrderByDescending(t => t.CreatedDate)
-                            .Skip((searchModel.PageIndex - 1) * searchModel.PageSize).Take(searchModel.PageSize).ToListAsync();
 
-            var returnData = returnEntityLs.Select(t => new LRDataModel()
-            {
-                Id = t.Id,
-                WfInstanceId = t.WfInstanceId,
-                EmployeeCode = t.EmployeeCode,
-                EmployeeName = t.EmployeeName,
-                DivisionCode = t.DivisionCode,
-                DateOffFrom = t.DateOffFrom,
-                DateOffTo = t.DateOffTo,
-                Reason = t.Reason,
-                Comment = t.Comment,
-                Status = t.Status,
-                Cc = t.Cc,
-                Bcc = t.Bcc,
-                CreatedDate = t.CreatedDate,
-                UpdatedDate = t.UpdatedDate,
-                LeaveRequestType = t.LeaveRequestType,
-                LeaveRequestDateType = t.LeaveRequestDateType,
-                PeriodDateOffFrom = t.PeriodDateOffFrom,
-                PeriodDateOffTo = t.PeriodDateOffTo,
-                Approver = t.Approver
-            }).ToList();
+            var query = leaveRequestDbSet.Where(whereExpression).OrderByDescending(t => t.CreatedDate).AsNoTracking();
+            int totalCount = await query.CountAsync();
+            var resultEntities = await query.Skip((searchModel.PageIndex - 1) * searchModel.PageSize)
+                            .Take(searchModel.PageSize).ToListAsync();
+            var returnData = _mapper.Map<List<LRDataModel>>(resultEntities);
 
             return (returnData, totalCount);
         }
         public async Task<LRDataModel> GetById(long id)
         {
             var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTransaction>();
-
             var entity = await leaveRequestDbSet.FirstOrDefaultAsync(t=>t.Id == id);
 
             if(entity is not null)
             {
-                return new LRDataModel()
-                {
-                    Id = entity.Id,
-                    WfInstanceId = entity.WfInstanceId,
-                    EmployeeCode = entity.EmployeeCode,
-                    EmployeeName = entity.EmployeeName,
-                    DivisionCode = entity.DivisionCode,
-                    DateOffFrom = entity.DateOffFrom,
-                    DateOffTo = entity.DateOffTo,
-                    Reason = entity.Reason,
-                    Comment = entity.Comment,
-                    Status = entity.Status,
-                    Cc = entity.Cc,
-                    Bcc = entity.Bcc,
-                    CreatedDate = entity.CreatedDate,
-                    UpdatedDate = entity.UpdatedDate,
-                    LeaveRequestType = entity.LeaveRequestType,
-                    LeaveRequestDateType = entity.LeaveRequestDateType,
-                    PeriodDateOffFrom = entity.PeriodDateOffFrom,
-                    PeriodDateOffTo = entity.PeriodDateOffTo,
-                    Approver = entity.Approver
-                };
+                return _mapper.Map<LRDataModel>(entity);
             }
             return null;
         }

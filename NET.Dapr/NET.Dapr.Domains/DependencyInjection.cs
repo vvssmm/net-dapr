@@ -7,6 +7,7 @@ namespace NET.Dapr.Domains
     {
         public static void InjectService(this IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(MapperProfiles));
             services.AddScoped<ILeaveRequestService, LeaveRequestService>();
             services.AddScoped<ITaskService, TasksService>();
         }

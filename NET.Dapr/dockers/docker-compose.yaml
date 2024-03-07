@@ -1,0 +1,13 @@
+version: '3'
+services:
+  netapp:
+    image: 'quay-ocp.unit.vn/menvs/netdapr:latest'
+    ports:
+      - '50001:50001'
+      - '8082:8082'
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8082
+    networks:
+      - hello-dapr
+networks:
+  hello-dapr: null

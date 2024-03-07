@@ -20,12 +20,12 @@ namespace NET.Dapr.Controllers
             apiModel.Success = true;
             return Ok(apiModel);
         }
-        [ProducesResponseType(typeof(ApiSearchResultModel<List<LRTaskDataModel>>), 200)]
+        [ProducesResponseType(typeof(ApiSearchResultModel<List<LRTaskApiModel>>), 200)]
         [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] LRTaskSearchModel payloadSubmit)
         {
-            var apiModel = new ApiSearchResultModel<List<LRTaskDataModel>>();
+            var apiModel = new ApiSearchResultModel<List<LRTaskApiModel>>();
             var response = await _taskService.Search(payloadSubmit);
             apiModel.Data = response.Item1;
             apiModel.TotalCount = response.Item2;
@@ -33,11 +33,11 @@ namespace NET.Dapr.Controllers
             return Ok(apiModel);
         }
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ApiResultModel<LRTaskDataModel>), 200)]
+        [ProducesResponseType(typeof(ApiResultModel<LRTaskApiModel>), 200)]
         [ProducesResponseType(typeof(ApiResultModel<string>), 500)]
         public async Task<IActionResult> GetById(long id)
         {
-            var apiModel = new ApiResultModel<LRTaskDataModel>();
+            var apiModel = new ApiResultModel<LRTaskApiModel>();
             var response = await _taskService.GetById(id);
             apiModel.Data = response;
             apiModel.Success = true;

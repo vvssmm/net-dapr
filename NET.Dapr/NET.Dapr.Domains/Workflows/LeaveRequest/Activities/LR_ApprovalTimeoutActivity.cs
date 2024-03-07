@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NET.Dapr.Domains.Entities;
 using NET.Dapr.Domains.Infra;
-using static NET.Dapr.Domains.Workflows.Consts;
+using static NET.Dapr.Domains.Consts;
 
 namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
 {

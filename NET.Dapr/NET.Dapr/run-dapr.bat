@@ -1,1 +1,1 @@
-dapr run --enable-api-logging --dapr-grpc-port 4001 --dapr-http-port 5000 --app-id wfapp -- dotnet run
+dapr run --app-id wfapp -- dotnet run

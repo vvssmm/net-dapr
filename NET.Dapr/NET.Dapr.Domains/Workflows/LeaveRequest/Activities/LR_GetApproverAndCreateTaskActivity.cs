@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NET.Dapr.Domains.Entities;
 using NET.Dapr.Domains.Infra;
-using static NET.Dapr.Domains.Workflows.Consts;
+using static NET.Dapr.Domains.Consts;
 
 namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
 {
-   
+
     public class LR_GetApproverAndCreateTaskActivity(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork) : WorkflowActivity<GetApproverAndCreateTaskRequest, GetApproverAndCreateTaskResponse>
     {
         readonly ILogger _logger = loggerFactory.CreateLogger<LR_GetApproverAndCreateTaskActivity>();

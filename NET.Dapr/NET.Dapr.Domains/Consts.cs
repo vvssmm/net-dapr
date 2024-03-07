@@ -1,4 +1,4 @@
-﻿namespace NET.Dapr.Domains.Workflows
+﻿namespace NET.Dapr.Domains
 {
     internal static class Consts
     {
@@ -30,12 +30,13 @@
         }
         internal static class WfConfig
         {
-            internal const string WorkflowCode = "LeaveRequestWf";
-            internal static class WfSteps
+            internal const string WorkflowComponet = "dapr";
+            internal static class LeaveRequest
             {
-                internal const string WaitingForApproval = "WaitingForApproval";
+                internal const string WorkflowName = "LeaveRequestWorkflow";
+                internal const string WorkflowApprovalEventName = "ManagerApproval";
             }
         }
-        internal const string DefaultSchema="DAPR";
+        internal const string DefaultSchema = "DAPR";
     }
 }
