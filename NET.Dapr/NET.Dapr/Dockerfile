@@ -9,17 +9,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["NET.Dapr/NET.Dapr.csproj", "NET.Dapr/"]
-RUN dotnet restore "./NET.Dapr/./NET.Dapr.csproj"
+COPY ["NET.Dapr/NET.Dapr.Workflow.csproj", "NET.Dapr/"]
+RUN dotnet restore "./NET.Dapr/./NET.Dapr.Workflow.csproj"
 COPY . .
 WORKDIR "/src/NET.Dapr"
-RUN dotnet build "./NET.Dapr.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./NET.Dapr.Workflow.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./NET.Dapr.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./NET.Dapr.Workflow.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "NET.Dapr.dll"]
+ENTRYPOINT ["dotnet", "NET.Dapr.Workflow.dll"]

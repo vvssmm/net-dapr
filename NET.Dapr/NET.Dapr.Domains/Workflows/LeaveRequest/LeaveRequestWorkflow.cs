@@ -30,7 +30,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                  nameof(LR_SendEmailNotifyActivity),
                  new LRSendEmailNotifyRequest(
                      TransactionId:input.TransactionId,
-                     Subject:$"[{input.TransactionId}][Review approval request] Leave Request {input.EmployeeCode} - {input.EmployeeName}",
+                     Subject:$"LR[{input.TransactionId}][Review for approval] Leave Request {input.EmployeeCode} - {input.EmployeeName}",
                      Body:$"Dear {getApproverResponse.Name} <br/>" +
                         $"Please review and approve for leave request of {input.EmployeeName}. <br/>" +
                         $"Leave from {input.DateOffFrom:dd/MM/yyyy} to {input.DateOffTo:dd/MM/yyyy}. <br/><br/>" +
@@ -45,7 +45,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                 {
                     managerApprovalResultResp = await context.WaitForExternalEventAsync<ManagerApprovalResult>(
                           eventName: "ManagerApproval",
-                          timeout: TimeSpan.FromMinutes(7));
+                          timeout: TimeSpan.FromMinutes(10));
                 }
                 catch (TaskCanceledException)
                 {
@@ -58,7 +58,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                         nameof(LR_SendEmailNotifyActivity),
                        new LRSendEmailNotifyRequest(
                               TransactionId: input.TransactionId,
-                               Subject: $"[{input.TransactionId}][Review approval result] Leave request - {input.EmployeeCode} - {input.EmployeeName}",
+                               Subject: $"LR[{input.TransactionId}][Review approval result] Leave request - {input.EmployeeCode} - {input.EmployeeName}",
                                Body: $"Dear {getApproverResponse.Name} <br/>" +
                                   $"Leave request has been timeout. Processing automatically cancelled. <br/>" +
                                   $"Thanks and best regards.",
@@ -81,7 +81,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
                        nameof(LR_SendEmailNotifyActivity),
                        new LRSendEmailNotifyRequest(
                            TransactionId: input.TransactionId,
-                           Subject: $"[[Review approval result]][{approveType}] Leave request {input.TransactionId} - {input.EmployeeCode} - {input.EmployeeName}",
+                           Subject: $"LR[{input.TransactionId}][Review approval result][{approveType}] Leave request {input.EmployeeCode} - {input.EmployeeName}",
                            Body: $"Dear {input.EmployeeName} <br/>" +
                               $"Your leave request has been {approveType} by {getApproverResponse.Name} <br/>" +
                               $"Comment: '{managerApprovalResultResp.Comment}' <br/>" +
@@ -101,8 +101,17 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest
             return new LRStartWorkflowResult(context.InstanceId, isSuccess, messages);
         }
     }
-    public record LRStartWorkflowPayload(
-    long TransactionId, string EmployeeCode, string EmployeeName, string DivisionCode,
-    DateTime? DateOffFrom, DateTime? DateOffTo, string Reason, string Cc, string Bcc);
+    public record LRStartWorkflowPayload
+    {
+        public long TransactionId { get; set; }
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string DivisionCode { get; set; }
+        public DateTime? DateOffFrom { get; set; }
+        public DateTime? DateOffTo { get; set; }
+        public string Reason { get; set; }
+        public string Cc { get; set; }
+        public string Bcc { get; set; }
+    };
     public record LRStartWorkflowResult(string WorkflowInstaceId, bool IsSuccess, List<string> Messages);
 }

@@ -25,7 +25,7 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
                     var emailHistoryDbSet = _unitOfWork.GetDbSet<EmailHistories>();
                     var emailHistory = new EmailHistories()
                     {
-                        Subject = $"[{context.InstanceId}][Reminder {index}] {taskItem.TaskName}",
+                        Subject = $"LR[{taskItem.TransactionId}][REMINDER {index}] {taskItem.TaskName}",
                         Content = $"Dear {taskItem.Assignee}, <br/><br/> Please review and approve this task: {taskItem.TaskName}",
                         ToEmail = taskItem.AssigneeEmail,
                         Status = (int)LREmailStatus.Sent,
