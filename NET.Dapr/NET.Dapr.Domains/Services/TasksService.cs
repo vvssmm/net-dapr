@@ -69,22 +69,35 @@ namespace NET.Dapr.Domains.Services
 
             var returnEntityQueryable = taskDbSet.Where(whereExpression).OrderByDescending(t => t.CreatedDate);
             int totalCount = await returnEntityQueryable.CountAsync(cancellationToken);
-            var resultEntities = await returnEntityQueryable
+            var taskEntities = await returnEntityQueryable
                             .Skip((searchModel.PageIndex - 1) * searchModel.PageSize)
                             .Take(searchModel.PageSize).ToListAsync(cancellationToken);
-
-            var returnData = _mapper.Map<List<LRTaskApiModel>>(resultEntities);
+            //var taskData = _mapper.Map<List<LRTaskApiModel>>(taskEntities);
+            var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTransaction>();
+            var returnData = taskEntities.Join(leaveRequestDbSet, task => task.TransactionId, lr => lr.Id, (task, lr) => new { task, lr }).Select(obj=>
+            {
+                var taskApiModel = _mapper.Map<LRTaskApiModel>(obj.task);
+                taskApiModel.EmployeeCode = obj.lr.EmployeeCode;
+                taskApiModel.EmployeeName = obj.lr.EmployeeName;
+                taskApiModel.DivisionCode = obj.lr.DivisionCode;
+                return taskApiModel;
+            }).ToList();
             return (returnData, totalCount);
         }
         public async Task<LRTaskApiModel> GetById(long id, CancellationToken cancellationToken = default)
         {
-            var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTasks>();
+            var taskDbSet = _unitOfWork.GetDbSet<LRTasks>();
 
-            var entity = await leaveRequestDbSet.FirstOrDefaultAsync(t=>t.Id == id,cancellationToken);
+            var entity = await taskDbSet.FirstOrDefaultAsync(t=>t.Id == id,cancellationToken);
 
             if (entity is not null)
             {
-                return mapper.Map<LRTaskApiModel>(entity);
+                var taskData =  mapper.Map<LRTaskApiModel>(entity);
+                var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTransaction>();
+                var lrItem = await leaveRequestDbSet.FirstOrDefaultAsync(l=>l.Id == taskData.TransactionId,cancellationToken);
+                taskData.EmployeeCode = lrItem?.EmployeeCode;
+                taskData.EmployeeName = lrItem?.EmployeeName;
+                taskData.DivisionCode = lrItem?.DivisionCode;
             }
             return null;
         }
@@ -98,6 +111,9 @@ namespace NET.Dapr.Domains.Services
     }
     public class LRTaskApiModel:BaseModel
     {
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string DivisionCode { get; set; }
         public string TaskName { get; set; }
         public string Assignee { get; set; }
         public string AssigneeEmail { get; set; }
