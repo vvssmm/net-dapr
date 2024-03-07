@@ -9,6 +9,7 @@ namespace NET.Dapr.Domains
     {
         public MapperProfiles()
         {
+            CreateMap<LRTransaction, LRBaseModel>().ReverseMap();
             CreateMap<LRTransaction, LRDataModel>().ReverseMap();
             CreateMap<LRTransaction, LRStartWorkflowPayload>().ReverseMap();
             CreateMap<LRTasks, LRDataModel>().ReverseMap();

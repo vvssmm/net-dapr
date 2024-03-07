@@ -29,14 +29,14 @@ namespace NET.Dapr.Domains.Services
             var lrEntity = _mapper.Map<LRTransaction>(postModel);
             string workflowInstaceId = $"{postModel.EmployeeCode}-{DateTime.UtcNow:yyyyMMddHHmmssfff}";
             lrEntity.WfInstanceId = workflowInstaceId;
-           
-            var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTransaction>();
+            lrEntity.Status = LRWorkflowStatus.GettingApprover.ToString();
+             var leaveRequestDbSet = _unitOfWork.GetDbSet<LRTransaction>();
             var responseEntity = await leaveRequestDbSet.AddAsync(lrEntity);
             int impactRows = await _unitOfWork.SaveChangesAsync();
             if (impactRows > 0)
             {
-                var workflowStartModel = _mapper.Map<LRStartWorkflowPayload>(responseEntity);
-
+                var workflowStartModel = _mapper.Map<LRStartWorkflowPayload>(responseEntity.Entity);
+                workflowStartModel.TransactionId = responseEntity.Entity.Id;
                 var res = await daprClient.StartWorkflowAsync(
                                 WfConfig.WorkflowComponet, WfConfig.LeaveRequest.WorkflowName,
                                 instanceId: workflowInstaceId,

@@ -4,7 +4,7 @@
     {
         internal enum LRWorkflowStatus
         {
-            GetApprover,
+            GettingApprover,
             WaitingForApproval,
             Approved,
             Rejected,
