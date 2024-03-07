@@ -19,9 +19,9 @@ namespace NET.Dapr.Domains.Services
     }
     public class TasksService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
     {
-        readonly IUnitOfWork _unitOfWork = unitOfWork;
         Dictionary<string, string> workflowOptionDics = [];
 
+        readonly IUnitOfWork _unitOfWork = unitOfWork;
         readonly DaprClient daprClient = new DaprClientBuilder().Build();
         readonly IMapper _mapper = mapper;
         public async Task TaskApproval(WorkflowApprovalApiModel taskApprovalPayload,CancellationToken cancellationToken = default)

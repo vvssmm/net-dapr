@@ -21,34 +21,34 @@ namespace NET.Dapr.Controllers
         readonly DaprClient daprClient = new DaprClientBuilder().Build();
         readonly ILogger logger = loggerFactory.CreateLogger<WorkflowController>();
 
-        [HttpPost("start")]
-        public async Task<IActionResult> Start([FromBody] LRStartWorkflowPayload payloadSubmit)
-        {
-            var returnResult = new ApiResultModel<LRDataModel>();
-            logger.LogDebug($"Receive body {JsonSerializer.Serialize(payloadSubmit)}");
-            string newInstanceId = DateTime.Now.ToString("yyyyMMddHHmmss");
-            logger.LogDebug($"InstanceId: {newInstanceId}");
-
-            var requestStartWorlflow = await daprClient.StartWorkflowAsync(
-                workflowComponent,
-                workflowName,
-                instanceId:newInstanceId,
-                workflowOptions:workflowOptionDics,
-                input:payloadSubmit);
-
-            returnResult.Success = true;
-            returnResult.Data = new LRDataModel()
-            {
-                WorkflowInstanceId = requestStartWorlflow.InstanceId,
-            };
-            returnResult.Messages = ["start workflow successfully"];
-            return Ok(returnResult);
-        }
-        //[HttpPost("approve")]
-        //public async Task<IActionResult> Approve([FromBody] WorkflowApprovalApiModel payloadApprove)
+        //[HttpPost("start")]
+        //public async Task<IActionResult> Start([FromBody] LRStartWorkflowPayload payloadSubmit)
         //{
-        //    await daprClient.RaiseWorkflowEventAsync(payloadApprove.WfInstanceId, workflowComponent, workflowApproveEventName, payloadApprove.ApprovalResult);
-        //    return Ok(new ApiResultModel<string>() { Success = true });
+        //    var returnResult = new ApiResultModel<LRDataModel>();
+        //    logger.LogDebug($"Receive body {JsonSerializer.Serialize(payloadSubmit)}");
+        //    string newInstanceId = DateTime.Now.ToString("yyyyMMddHHmmss");
+        //    logger.LogDebug($"InstanceId: {newInstanceId}");
+
+        //    var requestStartWorlflow = await daprClient.StartWorkflowAsync(
+        //        workflowComponent,
+        //        workflowName,
+        //        instanceId:newInstanceId,
+        //        workflowOptions:workflowOptionDics,
+        //        input:payloadSubmit);
+
+        //    returnResult.Success = true;
+        //    returnResult.Data = new LRDataModel()
+        //    {
+        //        WorkflowInstanceId = requestStartWorlflow.InstanceId,
+        //    };
+        //    returnResult.Messages = ["start workflow successfully"];
+        //    return Ok(returnResult);
         //}
+        ////[HttpPost("approve")]
+        ////public async Task<IActionResult> Approve([FromBody] WorkflowApprovalApiModel payloadApprove)
+        ////{
+        ////    await daprClient.RaiseWorkflowEventAsync(payloadApprove.WfInstanceId, workflowComponent, workflowApproveEventName, payloadApprove.ApprovalResult);
+        ////    return Ok(new ApiResultModel<string>() { Success = true });
+        ////}
     }
 }
