@@ -1,13 +1,49 @@
 version: '3'
 services:
+  ############################
+  # net app + Dapr sidecar
+  ############################
   netapp:
     image: 'quay-ocp.unit.vn/menvs/netdapr:latest'
     ports:
-      - '50001:50001'
-      - '8082:8082'
+      - "50001:50001"
+      - "8082:8082"
     environment:
       - ASPNETCORE_HTTP_PORTS=8082
+    depends_on:
+      - redis
+      - placement
     networks:
-      - hello-dapr
+      - daprpoc-network
+  netapp-dapr-sidecar:
+    image: "daprio/daprd:1.12.5"
+    command: ["./daprd",
+     "-app-id", "netapp",
+     "-placement-host-address", "placement:50006",
+     "-components-path", "/components"]
+    volumes:
+        - "./components/:/components"
+    depends_on:
+      - netapp
+    network_mode: "service:netapp"
+  ############################
+  # Dapr placement service
+  ############################
+  placement:
+    image: "daprio/dapr:1.12.5"
+    command: ["./placement", "-port", "50006"]
+    ports:
+      - "50006:50006"
+    networks:
+      - daprpoc-network
+  ############################
+  # Redis state store
+  ############################
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6380:6379"
+    networks:
+      - daprpoc-network
 networks:
-  hello-dapr: null
+    daprpoc-network:

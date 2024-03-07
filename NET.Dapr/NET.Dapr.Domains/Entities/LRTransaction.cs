@@ -50,5 +50,10 @@ namespace NET.Dapr.Domains.Entities
         [Column("COMMENT")]
         [MaxLength(500)]
         public string Comment { get; set; }
+        [Column("DATE_OFF")]
+        public DateTime? DateOff { get; set; }
+        [Column("PERIOD_DATE_OFF")]
+        [MaxLength(255)]
+        public string PeriodDateOff { get; set; }
     }
 }

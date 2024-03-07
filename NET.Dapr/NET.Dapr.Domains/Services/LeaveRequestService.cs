@@ -111,6 +111,9 @@ namespace NET.Dapr.Domains.Services
         public string Status { get; set; }
         public string Cc { get; set; }
         public string Bcc { get; set; }
+        public DateTime? DateOff { get; set; }
+        public string PeriodDateOff { get; set; }
+
     }
     public class LRDataModel : BaseModel
     {
@@ -130,6 +133,8 @@ namespace NET.Dapr.Domains.Services
         public string Cc { get; set; }
         public string Bcc { get; set; }
         public string Approver { get; set; }
+        public DateTime? DateOff { get; set; }
+        public string PeriodDateOff { get; set; }
 
     }
 }

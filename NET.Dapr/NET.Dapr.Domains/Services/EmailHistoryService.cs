@@ -1,39 +1,18 @@
-﻿using NET.Dapr.Domains.Entities;
-using NET.Dapr.Domains.Infra;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static NET.Dapr.Domains.Consts;
+﻿using NET.Dapr.Domains.Infra;
 
 namespace NET.Dapr.Domains.Services
 {
     internal interface IEmailHistoryService { 
         Task<bool> AddEmailHistory(EmailHistoryModel input);
     }
-    internal class EmailHistoryService(IUnitOfWork unitOfWork): IEmailHistoryService
+    internal class EmailHistoryService(IUnitOfWork unitOfWork) : IEmailHistoryService
     {
        readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task<bool> AddEmailHistory(EmailHistoryModel input,long transactionId)
+        public Task<bool> AddEmailHistory(EmailHistoryModel input)
         {
-            var emailHistoryDbSet = _unitOfWork.GetDbSet<EmailHistories>();
-            var emailHistory = new EmailHistories()
-            {
-                Subject = input.Subject,
-                Content = input.Body,
-                ToEmail = input.To,
-                CcEmail = input.Cc,
-                BccEmail = input.Bcc,
-                Status = (int)LREmailStatus.Sent,
-                TransactionID = input.TransactionId
-            };
-            await emailHistoryDbSet.AddAsync(emailHistory);
+            throw new NotImplementedException();
         }
-
-        int impactRows=await _unitOfWork.SaveChangesAsync();
-        bool isSuccess = impactRows > 0;
     }
     internal class EmailHistoryModel
     {

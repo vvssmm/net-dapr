@@ -1,4 +1,5 @@
 ﻿using Dapr.Workflow;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NET.Dapr.Domains.Entities;
 using NET.Dapr.Domains.Infra;
@@ -13,12 +14,11 @@ namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
         public override Task<bool> RunAsync(WorkflowActivityContext context, ReminderRequest input)
         {
             _logger.LogInformation($"WF instance {context.InstanceId}. Access to Reminder approval Activity. Repeatation {input.Repeatations} every {input.Minutes} minutes for Task {input.TaskId}");
-            var taskDbSet = _unitOfWork.GetDbSet<LRTasks>();
             int index = 0;
             while (index < input.Repeatations)
             {
                 Task.Delay(TimeSpan.FromMinutes(input.Minutes)).Wait();
-                var taskItem = taskDbSet.FirstOrDefault(t=>t.Id==input.TaskId);
+                var taskItem = _unitOfWork.GetDbSet<LRTasks>().AsNoTracking().FirstOrDefault(t=>t.Id==input.TaskId);
                 if (taskItem is not null && taskItem.Status == LRTaskStatus.New.ToString())
                 {
                     index++;
