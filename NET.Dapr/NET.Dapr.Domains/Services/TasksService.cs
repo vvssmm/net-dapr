@@ -69,7 +69,7 @@ namespace NET.Dapr.Domains.Services
 
             var returnEntityQueryable = taskDbSet.Where(whereExpression).OrderByDescending(t => t.CreatedDate);
             int totalCount = await returnEntityQueryable.CountAsync(cancellationToken);
-            var resultEntities = returnEntityQueryable
+            var resultEntities = await returnEntityQueryable
                             .Skip((searchModel.PageIndex - 1) * searchModel.PageSize)
                             .Take(searchModel.PageSize).ToListAsync(cancellationToken);
 

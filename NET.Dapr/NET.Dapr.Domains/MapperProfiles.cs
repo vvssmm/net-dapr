@@ -12,7 +12,7 @@ namespace NET.Dapr.Domains
             CreateMap<LRTransaction, LRBaseModel>().ReverseMap();
             CreateMap<LRTransaction, LRDataModel>().ReverseMap();
             CreateMap<LRTransaction, LRStartWorkflowPayload>().ReverseMap();
-            CreateMap<LRTasks, LRDataModel>().ReverseMap();
+            CreateMap<LRTasks, LRTaskApiModel>().ReverseMap();
         }
     }
 }
