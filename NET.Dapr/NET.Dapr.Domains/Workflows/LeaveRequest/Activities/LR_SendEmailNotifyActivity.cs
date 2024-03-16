@@ -6,7 +6,7 @@ using static NET.Dapr.Domains.Consts;
 
 namespace NET.Dapr.Domains.Workflows.LeaveRequest.Activities
 {
-    public record LRSendEmailNotifyRequest(long TransactionId,string Subject,string Body,string To,string Cc, string Bcc);
+    public record LRSendEmailNotifyRequest(long TransactionId, string Subject, string Body, string To, string Cc, string Bcc);
     public record LRSendEmailNotifyResponse(bool IsSuccess, List<string> Messages);
     public class LR_SendEmailNotifyActivity(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork) : WorkflowActivity<LRSendEmailNotifyRequest, LRSendEmailNotifyResponse>
     {

@@ -22,8 +22,9 @@ namespace NET.Dapr.Domains.Services
         Dictionary<string, string> workflowOptionDics = [];
 
         readonly IUnitOfWork _unitOfWork = unitOfWork;
-        readonly DaprClient daprClient = new DaprClientBuilder().Build();
         readonly IMapper _mapper = mapper;
+
+        readonly DaprClient daprClient = new DaprClientBuilder().Build();
         public async Task TaskApproval(WorkflowApprovalApiModel taskApprovalPayload,CancellationToken cancellationToken = default)
         {
             var transactionDbSet = _unitOfWork.GetDbSet<LRTransaction>();

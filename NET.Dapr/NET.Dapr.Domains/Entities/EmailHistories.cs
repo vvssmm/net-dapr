@@ -17,10 +17,10 @@ namespace NET.Dapr.Domains.Entities
         public string ToEmail { get; set; }
         [Column("CC_EMAIL")]
         [MaxLength(255)]
-        public string? CcEmail { get; set; }
+        public string CcEmail { get; set; }
         [Column("BCC_EMAIL")]
         [MaxLength(255)]
-        public string? BccEmail { get; set; }
+        public string BccEmail { get; set; }
         [Column("STATUS")]
         public int Status { get; set; }
         [Column("TRANSACTION_ID")]

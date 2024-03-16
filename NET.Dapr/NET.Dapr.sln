@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Workflow", "NET.Dapr\NET.Dapr.Workflow.csproj", "{77CF8B6C-5BF0-4590-8C94-490402A3542D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.LeaveRequest", "NET.Dapr\NET.Dapr.LeaveRequest.csproj", "{77CF8B6C-5BF0-4590-8C94-490402A3542D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Domains", "NET.Dapr.Domains\NET.Dapr.Domains.csproj", "{4E941E65-7AFF-4F03-884C-C18774C58F22}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Infrastructures", "NET.Dapr.Infrastructures\NET.Dapr.Infrastructures.csproj", "{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.Actors", "NET.Dapr.Actors\NET.Dapr.Actors.csproj", "{320575E9-62F8-466F-B7F2-DEB7049C2A80}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Dapr.DbMigration", "NET.Dapr.DbMigration\NET.Dapr.DbMigration.csproj", "{6FDC359F-1963-4F4E-B042-98C067A01657}"
 EndProject
@@ -33,10 +31,6 @@ Global
 		{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E4F8EF6-11F6-4886-88AF-925FCFA9AA54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{320575E9-62F8-466F-B7F2-DEB7049C2A80}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6FDC359F-1963-4F4E-B042-98C067A01657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6FDC359F-1963-4F4E-B042-98C067A01657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FDC359F-1963-4F4E-B042-98C067A01657}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,7 +41,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{77CF8B6C-5BF0-4590-8C94-490402A3542D} = {880066C8-BD93-45BB-BF74-8BA0AADCC7EE}
-		{320575E9-62F8-466F-B7F2-DEB7049C2A80} = {880066C8-BD93-45BB-BF74-8BA0AADCC7EE}
 		{6FDC359F-1963-4F4E-B042-98C067A01657} = {880066C8-BD93-45BB-BF74-8BA0AADCC7EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
